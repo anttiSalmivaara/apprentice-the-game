@@ -1,0 +1,3 @@
+{:require  [apprentice-the-game.app]
+ :init-fns [apprentice-the-game.app/init]
+ :compiler-options {:asset-path "js/app.out"}}
