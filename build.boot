@@ -12,6 +12,7 @@
                  [crisptrutski/boot-cljs-test "0.3.0" :scope "test"]
                  [reagent "0.6.0"]
                  [domina "1.0.3"]
+                 [reanimated "0.5.0"]
                  [org.martinklepsch/boot-garden "1.3.2-0" :scope "test"]])
 
 (require

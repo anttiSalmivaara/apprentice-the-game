@@ -20,26 +20,63 @@
              :width            "430px",
              :display          "block",
              :margin           "auto"}]
-           [:div.tile
-            {:border-style     "solid",
-             :vertical-align   "middle",
-             :border-radius    "15px",
-             :border-width     "2px",
-             :border-color     "#999999",
-             :width            "100px",
-             :height           "100px",
-             :text-align       "center",
-             :background-color "#FFFFFF"}]
+           ;[:div.tile
+           ; {:-webkit-transition      "0.6s",
+           ;  :-webkit-transform-style "preserve-3d",
+           ;  :-moz-transition         "0.6s",
+           ;  :-moz-transform-style    "preserve-3d",
+           ;  :-o-transition           "0.6s",
+           ;  :-o-transform-style      "preserve-3d",
+           ;  :transition              "0.6s",
+           ;  :transform-style         "preserve-3d"}]
+           ;[:div.tile:flip .mk3-tile,
+           ; :div.tile.flip .mk3-tile
+           ; {:-ms-transform     "rotateY(180deg)",
+           ;  :-moz-transform    "rotateY(180deg)",
+           ;  :-webkit-transform "rotateY(180deg)",
+           ;  :transform         "rotateY(180deg)"}]
+           [:div.tile-front
+            {:border-style                "solid",
+             :vertical-align              "middle",
+             :border-radius               "15px",
+             :border-width                "2px",
+             :border-color                "#999999",
+             :width                       "100px",
+             :height                      "100px",
+             :text-align                  "center",
+             :background-color            "#FFFFFF",
+             :-webkit-backface-visibility "hidden",
+             :-moz-backface-visibility    "hidden",
+             :-o-backface-visibility      "hidden",
+             :backface-visibility         "hidden"}]
+           [:div.tile-back
+            {:border-style                "solid",
+             :vertical-align              "middle",
+             :border-radius               "15px",
+             :border-width                "2px",
+             :border-color                "#999999",
+             :width                       "100px",
+             :height                      "100px",
+             :text-align                  "center",
+             :background-color            "#000000",
+             :-webkit-backface-visibility "hidden",
+             :-moz-backface-visibility    "hidden",
+             :-o-backface-visibility      "hidden",
+             :backface-visibility         "hidden"}]
            [:div.mk3-tile
-            {:border-style     "solid",
-             :vertical-align   "middle",
-             :border-radius    "15px",
-             :border-width     "2px",
-             :border-color     "#999999",
-             :width            "100px",
-             :height           "100px",
-             :text-align       "center",
-             :background-color "#000000"}]
+            {:border-style                "solid",
+             :vertical-align              "middle",
+             :border-radius               "15px",
+             :border-width                "2px",
+             :border-color                "#999999",
+             :width                       "100px",
+             :height                      "100px",
+             :text-align                  "center",
+             :background-color            "#000000",
+             :-webkit-backface-visibility "hidden",
+             :-moz-backface-visibility    "hidden",
+             :-o-backface-visibility      "hidden",
+             :backface-visibility         "hidden"}]
            [:img.mk3
             {:display      "block",
              :margin-left  "auto",
@@ -47,15 +84,15 @@
              :width        "200px",
              :height       "auto"}]
            [:img.tile
-            {:width "90px",
-             :height "auto",
+            {:width    "90px",
+             :height   "auto",
              :position "absolute",
-             :top 0,
-             :bottom 0,
-             :left 0,
-             :right 0,
-             :display "block",
-             :margin "auto"}]
+             :top      0,
+             :bottom   0,
+             :left     0,
+             :right    0,
+             :display  "block",
+             :margin   "auto"}]
            [:h2
             {:color      "#999999",
              :text-align "center"}]
@@ -154,4 +191,5 @@
              :padding     "5px",
              :display     "block",
              :margin-left "330px",
-             :margin-top  "340px"}])
+             :margin-top  "340px"}]
+           :div-front)
