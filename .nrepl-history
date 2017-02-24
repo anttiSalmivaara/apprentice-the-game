@@ -1,0 +1,10 @@
+(def a (atom {}))
+a
+(@a)
+(swap! a assoc :k "v")
+(swap! a assoc :k2 "v2")
+(:k (swap! a assoc :k2 "v2"))
+(@a)
+(deref a)
+(:k (swap! a assoc :k3 "v3"))
+(deref a)

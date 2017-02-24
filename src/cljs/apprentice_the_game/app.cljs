@@ -2,27 +2,15 @@
   (:require [reagent.core :as reagent]
             [reanimated.core :as anim]))
 
-(defn toggle-class [a k class1 class2]
-      (if (= (:status @a) class1)
-        (swap! a assoc :status class2 :passive-status class1)
-        (swap! a assoc :status class1 :passive-status class2)))
+(def game-state (reagent/atom {:game-started  false,
+                               :game-finished false,
+                               :tiles-turned  0}))
 
-(defonce state {:position1  (reagent/atom {}),
-                :position2  (reagent/atom {}),
-                :position3  (reagent/atom {}),
-                :position4  (reagent/atom {}),
-                :position5  (reagent/atom {}),
-                :position6  (reagent/atom {}),
-                :position7  (reagent/atom {}),
-                :position8  (reagent/atom {}),
-                :position9  (reagent/atom {}),
-                :position10 (reagent/atom {}),
-                :position11 (reagent/atom {}),
-                :position12 (reagent/atom {}),
-                :position13 (reagent/atom {}),
-                :position14 (reagent/atom {}),
-                :position15 (reagent/atom {}),
-                :position16 (reagent/atom {})})
+(defn toggle-class [a k class1 class2]
+      (.log js/console "click")
+      (if (= (@a :tile-status) class1)
+        (swap! a assoc :tile-status class2)
+        (swap! a assoc :tile-status class1)))
 
 (defn header-text []
       [:div.headertext
@@ -39,30 +27,44 @@
 (defn random-tiles []
       (zipmap (range 1 17) (shuffle (concat (tile-types) (tile-types)))))
 
-(defn game-tile [position tile-atom]
-      [:div {:class    (:status @tile-atom)
-             :on-click #(toggle-class tile-atom :status)}
-       [:img.tile (if (= "tile.back" (first (@state position)))
-                    {:src "mk3.jpg"}
-                    {:src (nth (@state position) 1)})]])
+(defn game-tile [position tile]
+      (let [possible-states (if (= tile "mk3.jpg")
+                              ["tile-back" "tile-mk3"]
+                              ["tile-back" "tile-front"])
+            local-state (reagent/atom {:position    position,
+                                       :tile        tile,
+                                       :tile-status "tile-back"})]
+           [:div {:class    (@local-state :tile-status)
+                  :on-click #(toggle-class local-state :tile-status (first possible-states) (second possible-states))}
+            [:img.tile (if (= "tile-back" (@local-state :tile-status))
+                         {:src "mk3.jpg"}
+                         {:src "tile"})]]))
 
 (defn generate-game-tile [position tile]
-      (swap! ((keyword (str "position" position)) state) assoc :status "tile-back")
-      (swap! ((keyword (str "position" position)) state) assoc :tile "tile")
-      (swap! ((keyword (str "position" position)) state) assoc :passive-status (if (= tile "mk3.jpg")
-                                                                                 "mk3-tile"
-                                                                                 "tile-front"))
-      [(keyword (str "div-position-" position)) (game-tile position ((keyword (str "position" position)) state))])
+      (.log js/console "generate-game-tile")
+      [(keyword (str "div.position-" position)) (game-tile position tile)])
 
 (defn game-board []
+      (.log js/console "game-board")
       (vec (cons :div.board (map #(generate-game-tile (first %) (second %)) (random-tiles)))))
+
+(defn generate-game-board []
+      (if (not (@game-state :game-started))
+        (do
+          (swap! game-state :game-started true)
+          (game-board))))
+
+
+
+(defn generate-tiles []
+      @(reagent/track (reagent/render-component [game-board] (.getElementById js/document "board"))))
 
 (defn calling-component []
       (.log js/console "calling-component")
       [:div
        [header-image]
        [header-text]
-       [game-board]])
+       [generate-game-board]])
 
 (defn init []
       (.log js/console "init")
