@@ -16,10 +16,33 @@
              :margin-right     "auto",
              :background-color "#000000"}]
            [:div.board
-            {:background-color "#111111",
+            {:background-color "#000000",
              :width            "430px",
              :display          "block",
              :margin           "auto"}]
+  [:div.start
+   {:border-style                "solid",
+    :background-color "#000000",
+             :vertical-align              "middle",
+             :border-radius               "15px",
+             :border-width                "2px",
+             :border-color                "#999999",
+             :width                       "100px",
+             :height                      "100px",
+             :text-align                  "center",
+    :display "block",
+    :margin "40px auto"}]
+  [:h2.start
+   {:padding-top "10px"}]
+  [:div.start:hover
+   {:background-color "#111111"}]
+  [:div.end
+   {:margin "auto"}]
+  [:img.blown
+   {:margin "auto",
+    :display "block"}]
+
+
            ;[:div.tile
            ; {:-webkit-transition      "0.6s",
            ;  :-webkit-transform-style "preserve-3d",
