@@ -20,27 +20,27 @@
              :width            "430px",
              :display          "block",
              :margin           "auto"}]
-  [:div.start
-   {:border-style                "solid",
-    :background-color "#000000",
-             :vertical-align              "middle",
-             :border-radius               "15px",
-             :border-width                "2px",
-             :border-color                "#999999",
-             :width                       "100px",
-             :height                      "100px",
-             :text-align                  "center",
-    :display "block",
-    :margin "40px auto"}]
-  [:h2.start
-   {:padding-top "10px"}]
-  [:div.start:hover
-   {:background-color "#111111"}]
-  [:div.end
-   {:margin "auto"}]
-  [:img.blown
-   {:margin "auto",
-    :display "block"}]
+           [:div.start
+            {:border-style     "solid",
+             :background-color "#000000",
+             :vertical-align   "middle",
+             :border-radius    "15px",
+             :border-width     "2px",
+             :border-color     "#999999",
+             :width            "100px",
+             :height           "100px",
+             :text-align       "center",
+             :display          "block",
+             :margin           "40px auto"}]
+           [:h2.start
+            {:padding-top "10px"}]
+           [:div.start:hover
+            {:background-color "#111111"}]
+           [:div.end
+            {:margin "auto"}]
+           [:img.blown
+            {:margin  "auto",
+             :display "block"}]
 
 
            ;[:div.tile
