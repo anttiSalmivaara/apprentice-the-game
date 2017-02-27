@@ -3,29 +3,27 @@
             [reanimated.core :as anim]))
 
 (def game-state (reagent/atom {:game-started  false,
-                               :game-finished false,
                                :pairs-found   0,
                                :tiles-flipped 0,
-                               :tile-flipped  ""
-                               :tile-flipped-position 0}))
+                               :flipped-1-position 0,
+                               :flipped-2-position 0}))
 
 (defn state-update [position]
-      (let [position-flipped-key (keyword (str "position-" position "-flipped"))
-            tiles-flipped (@game-state :tiles-flipped)
-            tile-flipped (@game-state :tile-flipped)]
-           (cond
-             (= 0 tiles-flipped) (swap! game-state assoc position-flipped-key true
-                                                         :tile-flipped (@game-state (keyword (str "position-" position "-tile")))
-                                                         :tiles-flipped 1)
-             (= 1 tiles-flipped) (do
-                                   (swap! game-state assoc position-flipped-key true)
-                                   (if (not = tile-flipped) (@game-state (keyword (str "position-" position "-tile")))))
-             )))
+  (let [amount-flipped (@game-state :tiles-flipped)
+        one-flipped (@game-state :flipped-1-position)]
+    (cond
+      (= 0 amount-flipped) (swap! game-state assoc (keyword (str "position-" position "-flipped")) true
+                                                   :flipped-1-position position
+                                                   :tiles-flipped 1)
+      (and (= 1 amount-flipped) (not (= position one-flipped))) (swap! game-state assoc (keyword (str "position-" position "-flipped")) true
+                                                                                        :flipped-2-position position
+                                                                                        :tiles-flipped 2))))
+
 
 (defn header-text []
       [:div.headertext
        [:h2 "apprentice-the-game"]
-       [:p.headertext "the game that lets you smell the joy of clojure"]])
+       [:p.headertext "the game that lets you experience the joy of clojure"]])
 
 (defn header-image []
       [:img.mk3 {:src "mk3.jpg"}])
@@ -36,16 +34,15 @@
 
 (defn random-tiles []
       (let [tiles (zipmap (range 1 17) (shuffle (concat (tile-types) (tile-types))))]
-           (doall (map #(swap! game-state assoc (keyword (str "position" (first %) "img")) (second %)) tiles))))
+           (doall (map #(swap! game-state assoc (keyword (str "position-" (first %) "-img")) (second %)) tiles))))
 
 (defn game-tile [position]
-      (let [position-flipped (keyword (str "position-" position "-flipped"))
-            flipped? (@game-state position-flipped)
-            tile-image (@game-state (keyword (str "position" position "img")))]
+      (let [flipped? (@game-state (keyword (str "position-" position "-flipped")))
+            tile-image (@game-state (keyword (str "position-" position "-img")))]
            [:div {:class    (if flipped?
                               "tile-front"
                               "tile-back")
-                  :on-click #(swap! game-state assoc position-flipped (not flipped?))}
+                  :on-click #(state-update position)}
             [:img.tile (if flipped?
                          {:src tile-image}
                          {:src "mk3.jpg"})]]))
@@ -55,6 +52,29 @@
 
 (defn game-view []
       (vec (cons :div (map #(generate-game-tile %) (range 1 17)))))
+
+(defn end-view []
+      [:div.end
+       [:img.blown {:src "blown.gif"}]])
+
+(declare game-board)
+
+(defn two-tiles-flipped []
+  (let [flipped-1-position (@game-state :flipped-1-position)
+        flipped-2-position (@game-state :flipped-2-position)
+        flipped-1-tile (@game-state (keyword (str "position-" flipped-1-position "-img")))
+        flipped-2-tile (@game-state (keyword (str "position-" flipped-2-position "-img")))]
+    (do
+      (.log js/console (str flipped-1-position " " flipped-2-position " " flipped-1-tile " " flipped-2-tile))
+      (if (not (= flipped-1-tile flipped-2-tile))
+        (swap! game-state assoc (keyword (str "position-" flipped-1-position "-flipped")) false
+                                (keyword (str "position-" flipped-2-position "-flipped")) false)
+        (swap! game-state assoc :pairs-found (inc (@game-state :pairs-found))))
+      (swap! game-state assoc :tiles-flipped 0
+                              :flipped-1-position 0
+                              :flipped-2-position 0)
+      (game-board))))
+
 
 (defn start-game []
       (do
@@ -66,17 +86,14 @@
       [:div.start {:on-click #(start-game)}
        [:h2.start "START"]])
 
-(defn end-view []
-      [:div.end
-       [:img.blown {:src "blown.gif"}]])
 
 (defn game-board []
       [:div.board
        (cond
-         (@game-state :game-finished) (end-view)
          (not (@game-state :game-started)) (start-view)
+         (= 8 (@game-state :pairs-found)) (end-view)
+         (= 2 (@game-state :tiles-flipped)) (two-tiles-flipped)
          :else (game-view))])
-
 
 (defn calling-component []
       [:div
